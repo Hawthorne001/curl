@@ -9,6 +9,7 @@ Protocol:
 See-also:
   - CURLOPT_FTPPORT (3)
   - CURLOPT_FTP_USE_EPSV (3)
+Added-in: 7.10.5
 ---
 
 # NAME
@@ -41,7 +42,7 @@ then.
 
 # DEFAULT
 
-# PROTOCOLS
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -66,10 +67,11 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-Added in 7.10.5
+# %AVAILABILITY%
 
 # RETURN VALUE
 
-Returns CURLE_OK
+curl_easy_setopt(3) returns a CURLcode indicating success or error.
+
+CURLE_OK (0) means everything was OK, non-zero means an error occurred, see
+libcurl-errors(3).

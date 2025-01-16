@@ -10,7 +10,8 @@ See-also:
   - curl_easy_recv (3)
   - curl_easy_send (3)
 Protocol:
-  - *
+  - All
+Added-in: 7.15.2
 ---
 
 # NAME
@@ -33,8 +34,8 @@ and then return.
 
 The option can be used to simply test a connection to a server, but is more
 useful when used with the CURLINFO_ACTIVESOCKET(3) option to
-curl_easy_getinfo(3) as the library can set up the connection and then
-the application can obtain the most recently used socket for special data
+curl_easy_getinfo(3) as the library can set up the connection and then the
+application can obtain the most recently used socket for special data
 transfers.
 
 Since 7.86.0, this option can be set to '2' and if HTTP or WebSocket are used,
@@ -42,21 +43,22 @@ libcurl performs the request and reads all response headers before handing
 over control to the application.
 
 Transfers marked connect only do not reuse any existing connections and
-connections marked connect only are not allowed to get reused.
+connections marked connect only are not allowed to get reused. For this
+reason, an easy handle cannot be reused for a second transfer when
+CURLOPT_CONNECT_ONLY(3) is set, it must be closed with curl_easy_cleanup(3)
+once the application is done with it.
 
 If the connect only transfer is done using the multi interface, the particular
 easy handle must remain added to the multi handle for as long as the
 application wants to use it. Once it has been removed with
-curl_multi_remove_handle(3), curl_easy_send(3) and
-curl_easy_recv(3) do not function.
+curl_multi_remove_handle(3), curl_easy_send(3) and curl_easy_recv(3) do not
+function.
 
 # DEFAULT
 
 0
 
-# PROTOCOLS
-
-HTTP, SMTP, POP3 and IMAP. For WS and WSS starting in 7.86.0.
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -70,16 +72,21 @@ int main(void)
     curl_easy_setopt(curl, CURLOPT_CONNECT_ONLY, 1L);
     ret = curl_easy_perform(curl);
     if(ret == CURLE_OK) {
-      /* only connected! */
+      /* only connected */
     }
   }
 }
 ~~~
 
-# AVAILABILITY
+# HISTORY
 
-Added in 7.15.2
+WS and WSS support added in 7.86.0.
+
+# %AVAILABILITY%
 
 # RETURN VALUE
 
-Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not.
+curl_easy_setopt(3) returns a CURLcode indicating success or error.
+
+CURLE_OK (0) means everything was OK, non-zero means an error occurred, see
+libcurl-errors(3).

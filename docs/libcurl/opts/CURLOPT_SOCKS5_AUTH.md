@@ -8,7 +8,8 @@ See-also:
   - CURLOPT_PROXY (3)
   - CURLOPT_PROXYTYPE (3)
 Protocol:
-  - *
+  - All
+Added-in: 7.55.0
 ---
 
 # NAME
@@ -36,9 +37,7 @@ password with the CURLOPT_PROXYUSERPWD(3) option.
 
 CURLAUTH_BASIC|CURLAUTH_GSSAPI
 
-# PROTOCOLS
-
-All
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -61,11 +60,11 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-Added in 7.55.0
+# %AVAILABILITY%
 
 # RETURN VALUE
 
-Returns CURLE_OK if the option is supported, CURLE_UNKNOWN_OPTION if not, or
-CURLE_NOT_BUILT_IN if the bitmask contains unsupported flags.
+curl_easy_setopt(3) returns a CURLcode indicating success or error.
+
+CURLE_OK (0) means everything was OK, non-zero means an error occurred, see
+libcurl-errors(3).

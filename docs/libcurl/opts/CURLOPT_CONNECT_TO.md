@@ -10,7 +10,8 @@ See-also:
   - CURLOPT_RESOLVE (3)
   - CURLOPT_URL (3)
 Protocol:
-  - *
+  - All
+Added-in: 7.49.0
 ---
 
 # NAME
@@ -75,13 +76,14 @@ When this option is passed to curl_easy_setopt(3), libcurl does not copy the
 list so you **must** keep it around until you no longer use this *handle* for
 a transfer before you call curl_slist_free_all(3) on the list.
 
+Using this option multiple times makes the last set list override the previous
+ones. Set it to NULL to disable its use again.
+
 # DEFAULT
 
 NULL
 
-# PROTOCOLS
-
-All
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -107,10 +109,11 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-Added in 7.49.0
+# %AVAILABILITY%
 
 # RETURN VALUE
 
-Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not.
+curl_easy_setopt(3) returns a CURLcode indicating success or error.
+
+CURLE_OK (0) means everything was OK, non-zero means an error occurred, see
+libcurl-errors(3).

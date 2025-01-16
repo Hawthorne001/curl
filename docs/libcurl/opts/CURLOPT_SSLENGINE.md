@@ -12,6 +12,7 @@ Protocol:
   - TLS
 TLS-backend:
   - OpenSSL
+Added-in: 7.9.3
 ---
 
 # NAME
@@ -34,13 +35,14 @@ identifier for the crypto engine you want to use for your private key.
 The application does not have to keep the string around after setting this
 option.
 
+Using this option multiple times makes the last set string override the
+previous ones. Set it to NULL to disable its use again.
+
 # DEFAULT
 
 NULL
 
-# PROTOCOLS
-
-All TLS based protocols: HTTPS, FTPS, IMAPS, POP3S, SMTPS etc.
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -58,9 +60,7 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-Only if the SSL backend is OpenSSL built with engine support.
+# %AVAILABILITY%
 
 # RETURN VALUE
 

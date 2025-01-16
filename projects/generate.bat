@@ -52,21 +52,17 @@ rem ***************************************************************************
     set VERSION=VC11
   ) else if /i "%~1" == "vc12" (
     set VERSION=VC12
-  ) else if /i "%~1" == "vc14" (
-    set VERSION=VC14
-  ) else if /i "%~1" == "vc14.10" (
-    set VERSION=VC14.10
-  ) else if /i "%~1" == "vc14.20" (
-    set VERSION=VC14.20
-  ) else if /i "%~1" == "vc14.30" (
-    set VERSION=VC14.30
   ) else if /i "%~1" == "-clean" (
     set MODE=CLEAN
   ) else if /i "%~1" == "-?" (
     goto syntax
+  ) else if /i "%~1" == "/?" (
+    goto syntax
   ) else if /i "%~1" == "-h" (
     goto syntax
   ) else if /i "%~1" == "-help" (
+    goto syntax
+  ) else if /i "%~1" == "--help" (
     goto syntax
   ) else (
     goto unknown
@@ -88,10 +84,6 @@ rem ***************************************************************************
   if "%VERSION%" == "VC10" goto vc10
   if "%VERSION%" == "VC11" goto vc11
   if "%VERSION%" == "VC12" goto vc12
-  if "%VERSION%" == "VC14" goto vc14
-  if "%VERSION%" == "VC14.10" goto vc14.10
-  if "%VERSION%" == "VC14.20" goto vc14.20
-  if "%VERSION%" == "VC14.30" goto vc14.30
 
 :vc10
   echo.
@@ -136,66 +128,6 @@ rem ***************************************************************************
     call :clean Windows\VC12\lib\libcurl.vcxproj
   )
 
-  if not "%VERSION%" == "ALL" goto success
-
-:vc14
-  echo.
-
-  if "%MODE%" == "GENERATE" (
-    echo Generating VC14 project files
-    call :generate vcxproj Windows\VC14\src\curl.tmpl Windows\VC14\src\curl.vcxproj
-    call :generate vcxproj Windows\VC14\lib\libcurl.tmpl Windows\VC14\lib\libcurl.vcxproj
-  ) else (
-    echo Removing VC14 project files
-    call :clean Windows\VC14\src\curl.vcxproj
-    call :clean Windows\VC14\lib\libcurl.vcxproj
-  )
-
-  if not "%VERSION%" == "ALL" goto success
-
-:vc14.10
-  echo.
-
-  if "%MODE%" == "GENERATE" (
-    echo Generating VC14.10 project files
-    call :generate vcxproj Windows\VC14.10\src\curl.tmpl Windows\VC14.10\src\curl.vcxproj
-    call :generate vcxproj Windows\VC14.10\lib\libcurl.tmpl Windows\VC14.10\lib\libcurl.vcxproj
-  ) else (
-    echo Removing VC14.10 project files
-    call :clean Windows\VC14.10\src\curl.vcxproj
-    call :clean Windows\VC14.10\lib\libcurl.vcxproj
-  )
-
-  if not "%VERSION%" == "ALL" goto success
-
-:vc14.20
-  echo.
-
-  if "%MODE%" == "GENERATE" (
-    echo Generating VC14.20 project files
-    call :generate vcxproj Windows\VC14.20\src\curl.tmpl Windows\VC14.20\src\curl.vcxproj
-    call :generate vcxproj Windows\VC14.20\lib\libcurl.tmpl Windows\VC14.20\lib\libcurl.vcxproj
-  ) else (
-    echo Removing VC14.20 project files
-    call :clean Windows\VC14.20\src\curl.vcxproj
-    call :clean Windows\VC14.20\lib\libcurl.vcxproj
-  )
-
-  if not "%VERSION%" == "ALL" goto success
-
-:vc14.30
-  echo.
-
-  if "%MODE%" == "GENERATE" (
-    echo Generating VC14.30 project files
-    call :generate vcxproj Windows\VC14.30\src\curl.tmpl Windows\VC14.30\src\curl.vcxproj
-    call :generate vcxproj Windows\VC14.30\lib\libcurl.tmpl Windows\VC14.30\lib\libcurl.vcxproj
-  ) else (
-    echo Removing VC14.30 project files
-    call :clean Windows\VC14.30\src\curl.vcxproj
-    call :clean Windows\VC14.30\lib\libcurl.vcxproj
-  )
-
   goto success
 
 rem Main generate function.
@@ -232,6 +164,7 @@ rem
       call :element %1 lib "timediff.c" %3
       call :element %1 lib "nonblock.c" %3
       call :element %1 lib "warnless.c" %3
+      call :element %1 lib "curl_get_line.c" %3
       call :element %1 lib "curl_multibyte.c" %3
       call :element %1 lib "version_win32.c" %3
       call :element %1 lib "dynbuf.c" %3
@@ -244,6 +177,7 @@ rem
       call :element %1 lib "nonblock.h" %3
       call :element %1 lib "warnless.h" %3
       call :element %1 lib "curl_ctype.h" %3
+      call :element %1 lib "curl_get_line.h" %3
       call :element %1 lib "curl_multibyte.h" %3
       call :element %1 lib "version_win32.h" %3
       call :element %1 lib "dynbuf.h" %3
@@ -375,10 +309,11 @@ rem
   echo vc10      - Use Visual Studio 2010
   echo vc11      - Use Visual Studio 2012
   echo vc12      - Use Visual Studio 2013
-  echo vc14      - Use Visual Studio 2015
-  echo vc14.10   - Use Visual Studio 2017
-  echo vc14.20   - Use Visual Studio 2019
-  echo vc14.30   - Use Visual Studio 2022
+  echo.
+  echo Only legacy Visual Studio project files can be generated.
+  echo.
+  echo To generate recent versions of Visual Studio project files use cmake.
+  echo Refer to INSTALL-CMAKE in the docs directory.
   echo.
   echo -clean    - Removes the project files
   goto error

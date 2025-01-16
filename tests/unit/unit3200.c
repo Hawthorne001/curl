@@ -22,7 +22,10 @@
  *
  ***************************************************************************/
 #include "curlcheck.h"
+/* disable the curlx_get_line redefinitions for this unit test */
+#define BUILDING_LIBCURL
 #include "curl_get_line.h"
+#include "memdebug.h"
 
 #if !defined(CURL_DISABLE_COOKIES) || !defined(CURL_DISABLE_ALTSVC) ||  \
   !defined(CURL_DISABLE_HSTS) || !defined(CURL_DISABLE_NETRC)
@@ -46,7 +49,7 @@ static CURLcode unit_stop(void)
   return CURLE_OK;
 }
 
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Woverlength-strings"
 #endif
@@ -77,7 +80,7 @@ static const char *filecontents[] = {
   "LINE1\x1aTEST"
 };
 
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic warning "-Woverlength-strings"
 #endif
 
@@ -88,7 +91,7 @@ UNITTEST_START
   for(i = 0; i < NUMTESTS; i++) {
     FILE *fp;
     struct dynbuf buf;
-    int len = 4096;
+    size_t len = 4096;
     char *line;
     Curl_dyn_init(&buf, len);
 
@@ -169,10 +172,10 @@ UNITTEST_START
     fclose(fp);
     fprintf(stderr, "OK\n");
   }
-  return rc;
+  return (CURLcode)rc;
 UNITTEST_STOP
 
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
 

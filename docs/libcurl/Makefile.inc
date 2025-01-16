@@ -41,6 +41,8 @@ man_MANS = \
  curl_easy_reset.3 \
  curl_easy_send.3 \
  curl_easy_setopt.3 \
+ curl_easy_ssls_import.3 \
+ curl_easy_ssls_export.3 \
  curl_easy_strerror.3 \
  curl_easy_unescape.3 \
  curl_easy_upkeep.3 \
@@ -87,6 +89,7 @@ man_MANS = \
  curl_multi_timeout.3 \
  curl_multi_wakeup.3 \
  curl_multi_wait.3 \
+ curl_multi_waitfds.3 \
  curl_pushheader_bynum.3 \
  curl_pushheader_byname.3 \
  curl_share_cleanup.3 \

@@ -5,11 +5,12 @@ Title: CURLOPT_HTTPPROXYTUNNEL
 Section: 3
 Source: libcurl
 Protocol:
-  - *
+  - All
 See-also:
   - CURLOPT_PROXY (3)
   - CURLOPT_PROXYPORT (3)
   - CURLOPT_PROXYTYPE (3)
+Added-in: 7.3
 ---
 
 # NAME
@@ -49,9 +50,7 @@ rarely works through the proxy anyway).
 
 0
 
-# PROTOCOLS
-
-All network protocols
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -68,10 +67,11 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-Always
+# %AVAILABILITY%
 
 # RETURN VALUE
 
-Returns CURLE_OK
+curl_easy_setopt(3) returns a CURLcode indicating success or error.
+
+CURLE_OK (0) means everything was OK, non-zero means an error occurred, see
+libcurl-errors(3).

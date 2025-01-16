@@ -11,6 +11,7 @@ See-also:
   - CURLOPT_HSTSREADDATA (3)
   - CURLOPT_HSTSWRITEFUNCTION (3)
   - CURLOPT_HSTS_CTRL (3)
+Added-in: 7.74.0
 ---
 
 # NAME
@@ -63,9 +64,7 @@ do that.
 
 NULL - no callback.
 
-# PROTOCOLS
-
-This feature is only used for HTTP(S) transfer.
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -99,9 +98,7 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-Added in 7.74.0
+# %AVAILABILITY%
 
 # RETURN VALUE
 

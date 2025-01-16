@@ -8,7 +8,8 @@ See-also:
   - CURLOPT_OPENSOCKETFUNCTION (3)
   - CURLOPT_SOCKOPTFUNCTION (3)
 Protocol:
-  - *
+  - All
+Added-in: 7.16.0
 ---
 
 # NAME
@@ -30,11 +31,9 @@ argument in the sockopt callback set with CURLOPT_SOCKOPTFUNCTION(3).
 
 # DEFAULT
 
-The default value of this parameter is NULL.
+NULL
 
-# PROTOCOLS
-
-All
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -68,9 +67,7 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-Added in 7.16.0
+# %AVAILABILITY%
 
 # RETURN VALUE
 

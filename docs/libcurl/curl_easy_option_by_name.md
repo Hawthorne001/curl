@@ -9,7 +9,8 @@ See-also:
   - curl_easy_option_next (3)
   - curl_easy_setopt (3)
 Protocol:
-  - *
+  - All
+Added-in: 7.73.0
 ---
 
 # NAME
@@ -34,6 +35,8 @@ insensitive.
 
 If libcurl has no option with the given name, this function returns NULL.
 
+# %PROTOCOLS%
+
 # EXAMPLE
 
 ~~~c
@@ -46,9 +49,7 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-This function was added in libcurl 7.73.0
+# %AVAILABILITY%
 
 # RETURN VALUE
 
