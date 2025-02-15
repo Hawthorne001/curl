@@ -10,7 +10,8 @@ See-also:
   - CURLOPT_STDERR (3)
   - curl_global_trace (3)
 Protocol:
-  - *
+  - All
+Added-in: 7.1
 ---
 
 # NAME
@@ -42,9 +43,7 @@ CURLOPT_DEBUGFUNCTION(3).
 
 0, meaning disabled.
 
-# PROTOCOLS
-
-All
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -64,10 +63,11 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-Always
+# %AVAILABILITY%
 
 # RETURN VALUE
 
-Returns CURLE_OK
+curl_easy_setopt(3) returns a CURLcode indicating success or error.
+
+CURLE_OK (0) means everything was OK, non-zero means an error occurred, see
+libcurl-errors(3).

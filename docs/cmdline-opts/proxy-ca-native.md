@@ -2,7 +2,7 @@
 c: Copyright (C) Daniel Stenberg, <daniel@haxx.se>, et al.
 SPDX-License-Identifier: curl
 Long: proxy-ca-native
-Help: Use CA certificates from the native OS for proxy
+Help: Load CA certs from the OS to verify proxy
 Protocols: TLS
 Category: tls
 Added: 8.2.0
@@ -10,9 +10,10 @@ Multi: boolean
 See-also:
   - cacert
   - capath
+  - dump-ca-embed
   - insecure
 Example:
-  - --ca-native $URL
+  - --proxy-ca-native $URL
 ---
 
 # `--proxy-ca-native`

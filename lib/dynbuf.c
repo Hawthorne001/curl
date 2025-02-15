@@ -32,7 +32,9 @@
 
 #define MIN_FIRST_ALLOC 32
 
+#ifdef DEBUGBUILD
 #define DYNINIT 0xbee51da /* random pattern */
+#endif
 
 /*
  * Init a dynbuf struct.
@@ -51,7 +53,7 @@ void Curl_dyn_init(struct dynbuf *s, size_t toobig)
 }
 
 /*
- * free the buffer and re-init the necessary fields. It doesn't touch the
+ * free the buffer and re-init the necessary fields. It does not touch the
  * 'init' field and thus this buffer can be reused to add data to again.
  */
 void Curl_dyn_free(struct dynbuf *s)
@@ -71,7 +73,7 @@ static CURLcode dyn_nappend(struct dynbuf *s,
   size_t a = s->allc;
   size_t fit = len + indx + 1; /* new string + old string + zero byte */
 
-  /* try to detect if there's rubbish in the struct */
+  /* try to detect if there is rubbish in the struct */
   DEBUGASSERT(s->init == DYNINIT);
   DEBUGASSERT(s->toobig);
   DEBUGASSERT(indx < s->toobig);
@@ -213,7 +215,7 @@ CURLcode Curl_dyn_vaddf(struct dynbuf *s, const char *fmt, va_list ap)
   }
   /* If we failed, we cleanup the whole buffer and return error */
   Curl_dyn_free(s);
-  return CURLE_OK;
+  return CURLE_OUT_OF_MEMORY;
 #endif
 }
 
@@ -242,6 +244,18 @@ char *Curl_dyn_ptr(const struct dynbuf *s)
   DEBUGASSERT(s->init == DYNINIT);
   DEBUGASSERT(!s->leng || s->bufr);
   return s->bufr;
+}
+
+char *Curl_dyn_take(struct dynbuf *s, size_t *plen)
+{
+  char *ptr = s->bufr;
+  DEBUGASSERT(s);
+  DEBUGASSERT(s->init == DYNINIT);
+  *plen = s->leng;
+  s->bufr = NULL;
+  s->leng = 0;
+  s->allc = 0;
+  return ptr;
 }
 
 /*

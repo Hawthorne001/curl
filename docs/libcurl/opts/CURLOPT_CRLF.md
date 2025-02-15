@@ -8,7 +8,8 @@ See-also:
   - CURLOPT_CONV_FROM_NETWORK_FUNCTION (3)
   - CURLOPT_CONV_TO_NETWORK_FUNCTION (3)
 Protocol:
-  - *
+  - All
+Added-in: 7.1
 ---
 
 # NAME
@@ -35,9 +36,7 @@ This is a legacy option of questionable use.
 
 0
 
-# PROTOCOLS
-
-All
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -55,10 +54,11 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-SMTP since 7.40.0, other protocols since they were introduced
+# %AVAILABILITY%
 
 # RETURN VALUE
 
-Returns CURLE_OK
+curl_easy_setopt(3) returns a CURLcode indicating success or error.
+
+CURLE_OK (0) means everything was OK, non-zero means an error occurred, see
+libcurl-errors(3).

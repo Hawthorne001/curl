@@ -14,6 +14,7 @@ TLS-backend:
   - wolfSSL
   - mbedTLS
   - BearSSL
+Added-in: 7.10.6
 ---
 
 # NAME
@@ -38,9 +39,7 @@ parameter.
 
 NULL
 
-# PROTOCOLS
-
-All TLS based protocols: HTTPS, FTPS, IMAPS, POP3S, SMTPS etc.
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -117,10 +116,12 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
+# HISTORY
 
 Added in 7.11.0 for OpenSSL, in 7.42.0 for wolfSSL, in 7.54.0 for mbedTLS,
-in 7.83.0 in BearSSL. Other SSL backends are not supported.
+in 7.83.0 in BearSSL.
+
+# %AVAILABILITY%
 
 # RETURN VALUE
 

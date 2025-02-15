@@ -8,7 +8,8 @@ See-also:
   - CURLMOPT_SOCKETFUNCTION (3)
   - CURLMOPT_TIMERFUNCTION (3)
 Protocol:
-  - *
+  - All
+Added-in: 7.16.0
 ---
 
 # NAME
@@ -35,9 +36,7 @@ callback's **clientp** argument.
 
 NULL
 
-# PROTOCOLS
-
-All
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -68,10 +67,11 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-Added in 7.16.0
+# %AVAILABILITY%
 
 # RETURN VALUE
 
-Returns CURLM_OK if the option is supported, and CURLM_UNKNOWN_OPTION if not.
+curl_multi_setopt(3) returns a CURLMcode indicating success or error.
+
+CURLM_OK (0) means everything was OK, non-zero means an error occurred, see
+libcurl-errors(3).

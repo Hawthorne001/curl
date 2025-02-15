@@ -12,7 +12,8 @@ See-also:
   - curl_url_set (3)
   - libcurl-errors (3)
 Protocol:
-  - *
+  - All
+Added-in: 7.80.0
 ---
 
 # NAME
@@ -32,6 +33,8 @@ const char *curl_url_strerror(CURLUcode errornum);
 This function returns a string describing the CURLUcode error code passed in
 the argument *errornum*.
 
+# %PROTOCOLS%
+
 # EXAMPLE
 
 ~~~c
@@ -46,9 +49,7 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-Added in 7.80.0
+# %AVAILABILITY%
 
 # RETURN VALUE
 

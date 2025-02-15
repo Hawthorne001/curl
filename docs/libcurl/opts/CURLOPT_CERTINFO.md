@@ -17,6 +17,7 @@ TLS-backend:
   - GnuTLS
   - Schannel
   - Secure Transport
+Added-in: 7.19.1
 ---
 
 # NAME
@@ -43,9 +44,7 @@ its option CURLINFO_CERTINFO(3).
 
 0
 
-# PROTOCOLS
-
-All TLS-based
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -86,12 +85,16 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
+# HISTORY
 
-This option is supported by the OpenSSL, GnuTLS, Schannel and Secure
-Transport backends. Schannel support added in 7.50.0. Secure Transport support
-added in 7.79.0.
+Schannel support added in 7.50.0. Secure Transport support added in 7.79.0.
+mbedTLS support added in 8.9.0.
+
+# %AVAILABILITY%
 
 # RETURN VALUE
 
-Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not.
+curl_easy_setopt(3) returns a CURLcode indicating success or error.
+
+CURLE_OK (0) means everything was OK, non-zero means an error occurred, see
+libcurl-errors(3).

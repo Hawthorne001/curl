@@ -11,7 +11,8 @@ See-also:
   - CURLOPT_REQUEST_TARGET (3)
   - CURLOPT_UPLOAD (3)
 Protocol:
-  - *
+  - All
+Added-in: 7.1
 ---
 
 # NAME
@@ -49,9 +50,7 @@ URL you request).
 
 0, the body is transferred
 
-# PROTOCOLS
-
-Most
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -62,7 +61,7 @@ int main(void)
   if(curl) {
     curl_easy_setopt(curl, CURLOPT_URL, "https://example.com");
 
-    /* get us the resource without a body - use HEAD! */
+    /* get us the resource without a body - use HEAD */
     curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
 
     /* Perform the request */
@@ -71,10 +70,11 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-Always
+# %AVAILABILITY%
 
 # RETURN VALUE
 
-Returns CURLE_OK
+curl_easy_setopt(3) returns a CURLcode indicating success or error.
+
+CURLE_OK (0) means everything was OK, non-zero means an error occurred, see
+libcurl-errors(3).

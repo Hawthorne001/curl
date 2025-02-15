@@ -10,7 +10,8 @@ See-also:
   - CURLOPT_MAXLIFETIME_CONN (3)
   - CURLOPT_TIMEOUT (3)
 Protocol:
-  - *
+  - All
+Added-in: 7.65.0
 ---
 
 # NAME
@@ -41,11 +42,9 @@ cache that is older than this set *age*, it is closed instead.
 
 # DEFAULT
 
-Default maximum age is set to 118 seconds.
+118 seconds
 
-# PROTOCOLS
-
-All
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -64,10 +63,11 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-Added in 7.65.0
+# %AVAILABILITY%
 
 # RETURN VALUE
 
-Returns CURLE_OK.
+curl_easy_setopt(3) returns a CURLcode indicating success or error.
+
+CURLE_OK (0) means everything was OK, non-zero means an error occurred, see
+libcurl-errors(3).

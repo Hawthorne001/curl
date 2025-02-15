@@ -46,9 +46,6 @@
 #include <netinet/tcp.h> /* for TCP_NODELAY */
 #endif
 
-#define ENABLE_CURLX_PRINTF
-/* make the curlx header define all printf() functions to use the curlx_*
-   versions instead */
 #include "curlx.h" /* from the private lib dir */
 #include "getpart.h"
 #include "util.h"
@@ -64,20 +61,19 @@
 #define ERANGE  34 /* errno.h value */
 #endif
 
-#ifdef ENABLE_IPV6
+#ifdef USE_IPV6
 static bool use_ipv6 = FALSE;
 #endif
 static const char *ipv_inuse = "IPv4";
 static int serverlogslocked = 0;
 
 #define REQBUFSIZ 150000
-#define REQBUFSIZ_TXT "149999"
 
 static long prevtestno = -1;    /* previous test number we served */
 static long prevpartno = -1;    /* previous part number we served */
-static bool prevbounce = FALSE; /* instructs the server to increase the part
-                                   number for a test in case the identical
-                                   testno+partno request shows up again */
+static bool prevbounce = FALSE; /* instructs the server to override the
+                                   requested part number to prevpartno + 1 when
+                                   prevtestno and current test are the same */
 
 #define RCMD_NORMALREQ 0 /* default request, use the tests file normally */
 #define RCMD_IDLE      1 /* told to sit idle */
@@ -89,10 +85,10 @@ typedef enum {
   RPROT_HTTP = 2
 } reqprot_t;
 
-#define SET_RTP_PKT_CHN(p,c)  ((p)[1] = (unsigned char)((c) & 0xFF))
+#define SET_RTP_PKT_CHN(p,c)  ((p)[1] = (char)((c) & 0xFF))
 
-#define SET_RTP_PKT_LEN(p,l) (((p)[2] = (unsigned char)(((l) >> 8) & 0xFF)), \
-                              ((p)[3] = (unsigned char)((l) & 0xFF)))
+#define SET_RTP_PKT_LEN(p,l) (((p)[2] = (char)(((l) >> 8) & 0xFF)), \
+                              ((p)[3] = (char)((l) & 0xFF)))
 
 struct httprequest {
   char reqbuf[REQBUFSIZ]; /* buffer area for the incoming request */
@@ -106,7 +102,7 @@ struct httprequest {
   bool auth;      /* Authorization header present in the incoming request */
   size_t cl;      /* Content-Length of the incoming request */
   bool digest;    /* Authorization digest header found */
-  bool ntlm;      /* Authorization ntlm header found */
+  bool ntlm;      /* Authorization NTLM header found */
   int pipe;       /* if non-zero, expect this many requests to do a "piped"
                      request/response */
   int skip;       /* if non-zero, the server is instructed to not read this
@@ -644,12 +640,10 @@ static void storerequest(char *reqbuf, size_t totalsize)
 
 storerequest_cleanup:
 
-  do {
-    res = fclose(dump);
-  } while(res && ((error = errno) == EINTR));
+  res = fclose(dump);
   if(res)
     logmsg("Error closing file %s error: %d %s",
-           dumpfile, error, strerror(error));
+           dumpfile, errno, strerror(errno));
 }
 
 /* return 0 on success, non-zero on failure */
@@ -956,7 +950,7 @@ static int send_doc(curl_socket_t sock, struct httprequest *req)
 
     count -= written;
     buffer += written;
-  } while(count>0);
+  } while(count > 0);
 
   /* Send out any RTP data */
   if(req->rtp_buffer) {
@@ -979,12 +973,10 @@ static int send_doc(curl_socket_t sock, struct httprequest *req)
     req->rtp_buffersize = 0;
   }
 
-  do {
-    res = fclose(dump);
-  } while(res && ((error = errno) == EINTR));
+  res = fclose(dump);
   if(res)
     logmsg("Error closing file %s error: %d %s",
-           responsedump, error, strerror(error));
+           responsedump, errno, strerror(errno));
 
   if(got_exit_signal) {
     free(ptr);
@@ -1069,12 +1061,12 @@ int main(int argc, char *argv[])
 
   memset(&req, 0, sizeof(req));
 
-  while(argc>arg) {
+  while(argc > arg) {
     if(!strcmp("--version", argv[arg])) {
       printf("rtspd IPv4%s"
              "\n"
              ,
-#ifdef ENABLE_IPV6
+#ifdef USE_IPV6
              "/IPv6"
 #else
              ""
@@ -1084,33 +1076,33 @@ int main(int argc, char *argv[])
     }
     else if(!strcmp("--pidfile", argv[arg])) {
       arg++;
-      if(argc>arg)
+      if(argc > arg)
         pidname = argv[arg++];
     }
     else if(!strcmp("--portfile", argv[arg])) {
       arg++;
-      if(argc>arg)
+      if(argc > arg)
         portname = argv[arg++];
     }
     else if(!strcmp("--logfile", argv[arg])) {
       arg++;
-      if(argc>arg)
+      if(argc > arg)
         serverlogfile = argv[arg++];
     }
     else if(!strcmp("--logdir", argv[arg])) {
       arg++;
-      if(argc>arg)
+      if(argc > arg)
         logdir = argv[arg++];
     }
     else if(!strcmp("--ipv4", argv[arg])) {
-#ifdef ENABLE_IPV6
+#ifdef USE_IPV6
       ipv_inuse = "IPv4";
       use_ipv6 = FALSE;
 #endif
       arg++;
     }
     else if(!strcmp("--ipv6", argv[arg])) {
-#ifdef ENABLE_IPV6
+#ifdef USE_IPV6
       ipv_inuse = "IPv6";
       use_ipv6 = TRUE;
 #endif
@@ -1118,16 +1110,16 @@ int main(int argc, char *argv[])
     }
     else if(!strcmp("--port", argv[arg])) {
       arg++;
-      if(argc>arg) {
+      if(argc > arg) {
         char *endptr;
         unsigned long ulnum = strtoul(argv[arg], &endptr, 10);
-        port = curlx_ultous(ulnum);
+        port = util_ultous(ulnum);
         arg++;
       }
     }
     else if(!strcmp("--srcdir", argv[arg])) {
       arg++;
-      if(argc>arg) {
+      if(argc > arg) {
         path = argv[arg];
         arg++;
       }
@@ -1157,11 +1149,11 @@ int main(int argc, char *argv[])
 
   install_signal_handlers(false);
 
-#ifdef ENABLE_IPV6
+#ifdef USE_IPV6
   if(!use_ipv6)
 #endif
     sock = socket(AF_INET, SOCK_STREAM, 0);
-#ifdef ENABLE_IPV6
+#ifdef USE_IPV6
   else
     sock = socket(AF_INET6, SOCK_STREAM, 0);
 #endif
@@ -1181,7 +1173,7 @@ int main(int argc, char *argv[])
     goto server_cleanup;
   }
 
-#ifdef ENABLE_IPV6
+#ifdef USE_IPV6
   if(!use_ipv6) {
 #endif
     memset(&me.sa4, 0, sizeof(me.sa4));
@@ -1189,7 +1181,7 @@ int main(int argc, char *argv[])
     me.sa4.sin_addr.s_addr = INADDR_ANY;
     me.sa4.sin_port = htons(port);
     rc = bind(sock, &me.sa, sizeof(me.sa4));
-#ifdef ENABLE_IPV6
+#ifdef USE_IPV6
   }
   else {
     memset(&me.sa6, 0, sizeof(me.sa6));
@@ -1198,7 +1190,7 @@ int main(int argc, char *argv[])
     me.sa6.sin6_port = htons(port);
     rc = bind(sock, &me.sa, sizeof(me.sa6));
   }
-#endif /* ENABLE_IPV6 */
+#endif /* USE_IPV6 */
   if(0 != rc) {
     error = SOCKERRNO;
     logmsg("Error binding socket on port %hu: (%d) %s",
@@ -1211,11 +1203,11 @@ int main(int argc, char *argv[])
        port we actually got and update the listener port value with it. */
     curl_socklen_t la_size;
     srvr_sockaddr_union_t localaddr;
-#ifdef ENABLE_IPV6
+#ifdef USE_IPV6
     if(!use_ipv6)
 #endif
       la_size = sizeof(localaddr.sa4);
-#ifdef ENABLE_IPV6
+#ifdef USE_IPV6
     else
       la_size = sizeof(localaddr.sa6);
 #endif
@@ -1231,7 +1223,7 @@ int main(int argc, char *argv[])
     case AF_INET:
       port = ntohs(localaddr.sa4.sin_port);
       break;
-#ifdef ENABLE_IPV6
+#ifdef USE_IPV6
     case AF_INET6:
       port = ntohs(localaddr.sa6.sin6_port);
       break;
@@ -1326,9 +1318,8 @@ int main(int argc, char *argv[])
 
       if(prevbounce) {
         /* bounce treatment requested */
-        if((req.testno == prevtestno) &&
-           (req.partno == prevpartno)) {
-          req.partno++;
+        if(req.testno == prevtestno) {
+          req.partno = prevpartno + 1;
           logmsg("BOUNCE part number to %ld", req.partno);
         }
         else {
@@ -1397,7 +1388,7 @@ server_cleanup:
 
   if(got_exit_signal) {
     logmsg("========> %s rtspd (port: %d pid: %ld) exits with signal (%d)",
-           ipv_inuse, (int)port, (long)getpid(), exit_signal);
+           ipv_inuse, (int)port, (long)Curl_getpid(), exit_signal);
     /*
      * To properly set the return status of the process we
      * must raise the same signal SIGINT or SIGTERM that we

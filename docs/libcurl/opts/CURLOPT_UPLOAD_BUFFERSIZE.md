@@ -9,7 +9,8 @@ See-also:
   - CURLOPT_READFUNCTION (3)
   - CURLOPT_TCP_NODELAY (3)
 Protocol:
-  - *
+  - All
+Added-in: 7.62.0
 ---
 
 # NAME
@@ -49,9 +50,7 @@ transfer as that may lead to unintended consequences.
 
 65536 bytes
 
-# PROTOCOLS
-
-All
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -73,10 +72,11 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-Added in 7.62.0.
+# %AVAILABILITY%
 
 # RETURN VALUE
 
-Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not.
+curl_easy_setopt(3) returns a CURLcode indicating success or error.
+
+CURLE_OK (0) means everything was OK, non-zero means an error occurred, see
+libcurl-errors(3).

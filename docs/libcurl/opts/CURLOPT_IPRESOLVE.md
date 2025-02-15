@@ -9,7 +9,8 @@ See-also:
   - CURLOPT_RESOLVE (3)
   - CURLOPT_SSLVERSION (3)
 Protocol:
-  - *
+  - All
+Added-in: 7.10.8
 ---
 
 # NAME
@@ -52,9 +53,7 @@ Uses only IPv6 addresses.
 
 CURL_IPRESOLVE_WHATEVER
 
-# PROTOCOLS
-
-All
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -76,10 +75,11 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-Always
+# %AVAILABILITY%
 
 # RETURN VALUE
 
-Returns CURLE_OK
+curl_easy_setopt(3) returns a CURLcode indicating success or error.
+
+CURLE_OK (0) means everything was OK, non-zero means an error occurred, see
+libcurl-errors(3).

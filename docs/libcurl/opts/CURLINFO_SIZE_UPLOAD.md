@@ -10,7 +10,8 @@ See-also:
   - curl_easy_getinfo (3)
   - curl_easy_setopt (3)
 Protocol:
-  - *
+  - All
+Added-in: 7.4.1
 ---
 
 # NAME
@@ -34,9 +35,7 @@ uploaded.
 CURLINFO_SIZE_UPLOAD_T(3) is a newer replacement that returns a more
 sensible variable type.
 
-# PROTOCOLS
-
-All
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -62,10 +61,15 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
+# DEPRECATED
 
-Added in 7.4.1. Deprecated since 7.55.0.
+Deprecated since 7.55.0.
+
+# %AVAILABILITY%
 
 # RETURN VALUE
 
-Returns CURLE_OK if the option is supported, and CURLE_UNKNOWN_OPTION if not.
+curl_easy_getinfo(3) returns a CURLcode indicating success or error.
+
+CURLE_OK (0) means everything was OK, non-zero means an error occurred, see
+libcurl-errors(3).

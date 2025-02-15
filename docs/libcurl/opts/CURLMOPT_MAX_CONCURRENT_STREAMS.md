@@ -9,6 +9,7 @@ See-also:
   - CURLOPT_MAXCONNECTS (3)
 Protocol:
   - HTTP
+Added-in: 7.67.0
 ---
 
 # NAME
@@ -37,9 +38,7 @@ value passed here would be honored based on other system resources properties.
 
 100
 
-# PROTOCOLS
-
-All
+# %PROTOCOLS%
 
 # EXAMPLE
 
@@ -52,10 +51,11 @@ int main(void)
 }
 ~~~
 
-# AVAILABILITY
-
-Added in 7.67.0
+# %AVAILABILITY%
 
 # RETURN VALUE
 
-Returns CURLM_OK if the option is supported, and CURLM_UNKNOWN_OPTION if not.
+curl_multi_setopt(3) returns a CURLMcode indicating success or error.
+
+CURLM_OK (0) means everything was OK, non-zero means an error occurred, see
+libcurl-errors(3).
